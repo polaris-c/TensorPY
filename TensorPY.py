@@ -106,6 +106,9 @@ class log(Operation):
     def computer(self, x_value):
         return np.log(x_value)
 
+_gradient_registry = {}
+
+
 def computer_gradients(loss):
     grad_table = {}
 
@@ -126,7 +129,7 @@ class GradientDescentOptimizer(object):
                         grad = grad_table[node]
                         node.value -= learning_rate * grad
         return MinimizationOperation()
-
+  
 # 
 def traverse_postorder(operation):
     '''

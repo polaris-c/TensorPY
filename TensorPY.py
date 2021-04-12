@@ -1,7 +1,9 @@
 import numpy as np
-import Queue
-
-# import OperationClass
+try:
+    import Queue
+except ImportError:
+    import queue as Queue
+# import queue as 
 
 class Graph(object):
     '''
@@ -153,10 +155,6 @@ def computer_gradients(loss):
                     visited.add(input_node)
                     queue.put(input_node)
     return grad_table
-
-
-    return grad_table
-
 
 class GradientDescentOptimizer(object):
     def __init__(self, learning_rate):

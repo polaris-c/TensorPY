@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 import TensorPY as tp
 
-red_points = np.random.randn(50, 2)  - 2*np.ones((50, 2))
-blue_points = np.random.randn(50, 2) + 2*np.ones((50, 2))
+red_points = np.random.randn(5, 2)  - 2*np.ones((5, 2))
+blue_points = np.random.randn(5, 2) + 2*np.ones((5, 2))
 
 tp.Graph().as_default()
 
@@ -21,14 +21,19 @@ feed_dict = {
     c: [[1,0]]*len(blue_points) + [[0, 1]]*len(red_points)
 }
 
+print('>> Data is OK')
+
 J = tp.negative(tp.reduce_sum(tp.reduce_sum(tp.multiply(c, tp.log(p)), axis=1)))
 
 minimization_op = tp.GradientDescentOptimizer(learning_rate=0.01).minimize(J)
 
+print('>> J and minimization_op is OK')
+
+print('>> Session ')
 session = tp.Session()
-for step in range(100):
+for step in range(5):
     J_value = session.run(J, feed_dict)
-    if step % 10 == 0:
+    if step % 1 == 0:
         print('Step:[%s], Loss:[%s]' % (step, J_value))
 session.run(minimization_op, feed_dict)
 

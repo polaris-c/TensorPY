@@ -112,10 +112,14 @@ class log(Operation):
 _gradient_registry = {}
 class RegisterGradient(object):
     '''
+     给operation注册梯度计算函数
     '''
     def __init__(self, op_type):
+        print('-> RegisterGradient op_type: ', op_type, type(op_type))
+        # 操作节点类内存地址
         self._op_type = eval(op_type)
     def __call__(self, f):
+        print('-> RegisterGradient self._op_type: ', self._op_type)
         _gradient_registry[self._op_type] = f
         return f
 
@@ -123,7 +127,21 @@ class RegisterGradient(object):
 def _negative_gradient(op, grad):
     '''
     '''
+    print('-> _negative_gradient grad:', grad)
     return -grad
+
+@RegisterGradient('reduce_sum')
+def _reduce_sum_gradient(op, grad):
+    '''
+    '''
+    print('-> _reduce_sum_gradient grad:', grad)
+    return -grad
+
+print('-> _gradient_registry_: ')
+# print(str(_gradient_registry))
+_gradient_registry_ = _gradient_registry.items()
+for k, v in _gradient_registry_:
+    print('\t %s -- %s' % (k, v))
 
 def computer_gradients(loss):
     grad_table = {}
@@ -188,8 +206,10 @@ class Session(object):
     def run(self, operation, feed_dict={}):
         '''
         '''
+        print('-> run operation:', operation)
         nodes_postorder = traverse_postorder(operation)
         for node in nodes_postorder:
+            # print('-> node: ', node)
             if isinstance(node, Placeholder):
                 node.output = feed_dict[ node ]
             elif isinstance(node, Variable):

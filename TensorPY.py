@@ -137,6 +137,20 @@ def _reduce_sum_gradient(op, grad):
     print('-> _reduce_sum_gradient grad:', grad)
     return -grad
 
+@RegisterGradient('multiply')
+def _multiply_gradient(op, grad):
+    '''
+    '''
+    print('-> _multiply_gradient grad:', grad)
+    return -grad
+
+# @RegisterGradient('reduce_sum')
+# def _reduce_sum_gradient(op, grad):
+#     '''
+#     '''
+#     print('-> _reduce_sum_gradient grad:', grad)
+#     return -grad
+
 print('-> _gradient_registry_: ')
 # print(str(_gradient_registry))
 _gradient_registry_ = _gradient_registry.items()
@@ -208,8 +222,9 @@ class Session(object):
         '''
         print('-> run operation:', operation)
         nodes_postorder = traverse_postorder(operation)
+        # print('-> nodes_postorder: ', nodes_postorder)
         for node in nodes_postorder:
-            # print('-> node: ', node)
+            print('-> node: ', node)
             if isinstance(node, Placeholder):
                 node.output = feed_dict[ node ]
             elif isinstance(node, Variable):
